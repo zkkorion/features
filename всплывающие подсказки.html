@@ -1,0 +1,108 @@
+<style>
+.advant .f-i{
+	position: relative;
+	cursor: pointer;
+}
+.fa-question-circle-o{
+	color: #0f3484;
+	font-size: 16px;
+	align-self: flex-start;
+}
+.advant .fa-question-circle-o:hover .hint-text {
+display: inline-block;
+-webkit-animation-name: fadeInDown;
+animation-name: fadeInDown;
+}
+.notEvenP{color:#000;}
+.hint-text:before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 27px 34px 27px 0;
+    border-color: transparent #d2d2d2 transparent transparent;
+    position: absolute;
+    bottom: -28px;
+    right: -2px;
+}
+.hint-text:after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 25px 31px 25px 0;
+    border-color: transparent #ffffff transparent transparent;
+    position: absolute;
+    bottom: -24px;
+    right: 0;
+}
+.hint-text {
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+    width:360px;
+    background-color: #fff;
+    text-align: left;
+    padding: 30px 30px 25px 20px;
+    z-index: 5;
+    border-radius: 5px;
+    border: 2px solid #d2d2d2;
+    display: none;
+    -webkit-animation-duration: .5s;
+    animation-duration: .5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+@keyframes fadeInDown{
+	from{
+		opacity:0;
+		-webkit-transform:translate3d(0, -100%, 0);
+		transform:translate3d(0, -100%, 0);
+	}
+	to{
+		opacity:1;
+		-webkit-transform:none;
+		transform:none;
+	}
+}
+</style>
+
+<div class="f-c advant">
+	<div class="f-i">
+		<p class="text">Совмещение европейских и китайских методов лечения</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div></i>
+	</div>
+	<div class="f-i">
+		<p class="text">Опытные военные врачи со стажем практики не менее 15 лет</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div>
+		</i>
+	</div>
+	<div class="f-i">
+		<p class="text">Точное определение причин заболевания за 2-3 дня</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div>
+		</i>
+	</div>
+	<div class="f-i">
+		<p class="text">Государственный контроль качества лечения</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div>
+		</i>
+	</div>
+	<div class="f-i">
+		<p class="text">Лечение сложных заболеваний без операций и химических препаратов</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div>
+		</i>
+	</div>
+	<div class="f-i">
+		<p class="text">Клиника расположена в экологически чистом районе</p>
+		<i class="fa fa-question-circle-o hidden-sm hidden-xs" aria-hidden="true">
+			<div class="hint-text hidden-sm hidden-xs"><div class="hint-body notEvenPadding"><p class="notEvenP">Текст</p></div></div>
+		</i>
+	</div>
+</div>

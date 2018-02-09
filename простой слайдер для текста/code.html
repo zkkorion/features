@@ -1,0 +1,96 @@
+<style type="text/css">
+.RSText{display: none;}
+.active{display: inline-block;}
+.point{
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background-color: #5a71a5;
+	border-radius: 50%;
+	margin-right: 15px;
+}
+.activePoint{
+	width: 18px;
+	height: 18px;
+	border-color:#1b3b84;
+}
+.RSText .servClass {
+	line-height: 1.5;
+	font-weight: bold;
+    max-height: 130px;
+    overflow: hidden;
+}
+.RSAuthor {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 2.2;
+    margin-bottom: 15px;
+}
+</style>
+<div class="col-xs-12 reviewSlider">
+	<div class="row">
+		<div class="leftBtn col-md-1 hidden-xs"><img src="img/leftBtn.png"></div>
+		<div class="RSText col-xs-12 col-md-10 active" data-id="1">
+			<div class="row">
+				<p class="servClass">Some text</p>
+				<p class="RSAuthor">Name</p>
+			</div>
+		</div>
+		<div class="RSText col-xs-12 col-md-10" data-id="2">
+			<div class="row">
+				<p class="servClass">Some text</p>
+				<p class="RSAuthor">Name</p>
+			</div>
+		</div>
+		<div class="RSText col-xs-12 col-md-10" data-id="3">
+			<div class="row">
+				<p class="servClass">Some text</p>
+				<p class="RSAuthor">Name</p>
+			</div>
+		</div>
+		<div class="rightBtn col-md-1 hidden-xs"><img src="img/rightBtn.png"></div>
+	</div>
+	<div class="col-xs-12 pointer">
+		<span class="point activePoint" data-id="1"></span>
+		<span class="point" data-id="2"></span>
+		<span class="point" data-id="3"></span>
+	</div>				
+</div>
+<script type="text/javascript">
+$(document).ready(function(){//вся магия после загрузки страницы
+	//слайдер с отзывами
+	var elActive, elid, point, pointid;
+	var firstEl = $(".RSText:first").attr("data-id");//находим первый элемент
+	var lastEl = $(".RSText:last").attr("data-id");//находим последний элемент
+	$(".rightBtn").click(function(){//ловим клик по кнопке "вправо"
+		elActive = $(".RSText.active");//текущий элемент
+		elid = elActive.attr("data-id");//получаем порядковый номер текущего ээлемента
+		$(".point[data-id="+elid+"]").removeClass("activePoint");
+		elid++;//увеличиваем порядковый номер для дальнейщего получения следующего элемента
+		if (elid > lastEl) {elid=firstEl;}// проверка чтоб не выскочить за пределы списка элементов
+		$(".point[data-id="+elid+"]").addClass("activePoint");
+		elActive.removeClass("active");//удаляем отображающий класс
+		elActive = $(".RSText[data-id="+elid+"]");//получаем следующий элемент и кладем его в текущий
+		elActive.addClass("active");//Bada-bums-s-s
+	});
+	$(".leftBtn").click(function(){//тут все тоже только в обратную сторону
+		elActive = $(".RSText.active");
+		elid = elActive.attr("data-id");
+		$(".point[data-id="+elid+"]").removeClass("activePoint");
+		elid--;
+		if (elid < firstEl) {elid=lastEl;}
+		$(".point[data-id="+elid+"]").addClass("activePoint");
+		elActive.removeClass("active");
+		elActive = $(".RSText[data-id="+elid+"]");
+		elActive.addClass("active");
+	});
+	$(".point").click(function(){
+		pointid = $(this).attr("data-id");
+		$(".activePoint").removeClass("activePoint");
+		$(this).addClass("activePoint");
+		$(".RSText.active").removeClass("active");
+		$(".RSText[data-id="+pointid+"]").addClass("active");
+	});
+});
+	//end слайдер с отзывами
+</script>
