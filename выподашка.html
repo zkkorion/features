@@ -1,0 +1,46 @@
+<nav>
+    <ul class="first-level">
+        <li><a href="#">Item 1</a></li>
+        <li class="dropdown-item"><a href="#">Item Dropdown</a>
+        <ul class="dropdown-list">
+            <li><a href="#">Dropdown 1</a></li>
+            <li><a href="#">Dropdown 2</a></li>
+            <li><a href="#">Dropdown 3</a></li>
+            <li><a href="#">Dropdown 4</a></li>
+        </ul>
+        </li>
+        <li><a href="#">Item 3</a></li>
+        <li><a href="#">Item 4</a></li>
+    </ul>
+</nav>
+<style>
+    nav {
+    width: 100%;
+    background-color: pink;
+    font-size: 24px;
+    }
+    .first-level {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0;
+    list-style-type: none;
+    }
+    .dropdown-item {
+    position: relative;
+    }
+    .dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    list-style-type: none;
+    display: none;
+    background-color: lightgrey;
+    }
+    .dropdown-item:hover .dropdown-list {
+    display: block;
+    }
+</style>
