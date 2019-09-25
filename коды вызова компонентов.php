@@ -1,3 +1,9 @@
+select * from b_event
+	order by DATE_EXEC desc
+**************************************************
+select * from b_event 
+	where event_name like '%form%' 
+	order by date_insert desc
 <?
 	echo "<pre>";echo "************ARRESULT***********<br />";echo print_r($arResult);echo "************ARPARAMS***********<br />";echo print_r($arParams);echo "</pre>";
 ?>
