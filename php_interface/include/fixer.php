@@ -8,7 +8,7 @@ namespace A1expert
         public $beacon;
         public function __construct()
         {
-            $this->$beacon = true;
+            $this->beacon = true;
         }
         /**
          * Очищает массив от пустых значений и делает trim. Все происходит рекурсивно, без ограничения по вложенности.
@@ -41,51 +41,64 @@ namespace A1expert
         }
         public function GetProps(&$arResult)
         {
-            $arProps = $arResult["props"];
-            foreach ($arProps as $k => $v)
+            
+            foreach ($arResult as $k=>$v)
             {
-                switch ($v["PROPERTY_TYPE"])
+                if(preg_match("/^PROPERTY_(.*)_VALUE_ID$/", $k))
+                    $propsIds[] = $v;
+            }
+            if(isset($propsIds))
+            {
+                foreach ($propsIds as $k => $v)
                 {
-                    case "F":
-                        if(is_array($v["VALUE"]))
-                        {
-                            foreach ($v["VALUE"] as $i=>$id) {
-                                $arResult["PROPERTY_". $v["CODE"] . "_VALUE"][$i] = \CFile::GetPath($id);
-                            }
-                        }
-                        else
+                    $local = explode(":", $v);
+                    $ids[] = intval($local[1]);
+                }
+                Loader::includeModule("iblock");
+                foreach($ids as $id)
+                {
+                    $res = \CIBlockProperty::GetByID($id);
+                    if($ar_res = $res->GetNext())
+                        $arProps[] = $ar_res;
+                }
+                foreach ($arProps as $k => $v)
+                {
+                    switch ($v["PROPERTY_TYPE"])
+                    {
+                        case "F":
                             $arResult["PROPERTY_". $v["CODE"] . "_VALUE"] = \CFile::GetFileArray($arResult["PROPERTY_". $v["CODE"] . "_VALUE"]);
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
-        public function SetOrder($array1=array(), $array2=array())
+        public function SetOrder($array1 = [], $array2 = [])
         {
             if(!is_array($array1))
-                $array1 = array();
+                $array1 = [];
             if(!is_array($array2))
-                $array2 = array();
-            $retunArr = array_merge($array1=array(), $array2=array());
+                $array2 = [];
+            $retunArr = array_merge($array1 = [], $array2 = []);
             return $retunArr;
         }
-        public function SetFilter($array1=array(), $array2=array())
+        public function SetFilter($array1 = [], $array2 = [])
         {
             if(!is_array($array1))
-                $array1 = array();
+                $array1 = [];
             if(!is_array($array2))
-                $array2 = array();
+                $array2 = [];
             $tmpArr = array("ACTIVE" => "Y", "CHECK_PERMISSIONS" => "Y");
             $retunArr = array_merge($tmpArr, $array1, $array2);
             return $retunArr;
         }
-        public function SetSelect($array1=array(), $array2=array())
+        public function SetSelect($array1 = [], $array2 = [])
         {
             if(!is_array($array1))
-                $array1 = array();
+                $array1 = [];
             if(!is_array($array2))
-                $array2 = array();
+                $array2 = [];
             $tmpArr = array("ID", "IBLOCK_ID");
             $retunArr = array_merge($tmpArr, $array1, $array2);
             return $retunArr;
@@ -135,7 +148,17 @@ namespace A1expert
                     $arResult["DETAIL_PICTURE"] = \CFile::GetFileArray($arResult["DETAIL_PICTURE"]);
             }
         }
-        public function MakeGallery($imageIds, $bigSize=array("width"=>800, "height"=>600), $smallSize=array("width"=>112, "height"=>62))
+        public function GetSectionPictures(&$arResult, $arSelect)
+        {
+            if(in_array("PICTURE", $arSelect) || in_array("DETAIL_PICTURE", $arSelect))
+            {
+                if(!empty($arResult["PICTURE"]))
+                    $arResult["PICTURE"] = \CFile::GetFileArray($arResult["PICTURE"]);
+                if(!empty($arResult["DETAIL_PICTURE"]))
+                    $arResult["DETAIL_PICTURE"] = \CFile::GetFileArray($arResult["DETAIL_PICTURE"]);
+            }
+        }
+        public function MakeGallery($imageIds, $bigSize = array("width"=>800, "height"=>600), $smallSize = array("width"=>112, "height"=>62))
         {
             foreach ($imageIds as $i=>$img)
             {
@@ -151,7 +174,7 @@ namespace A1expert
          * @var bool $arNavStartParams
          * @var array $arSelect
          */
-        public function GetElements($arOrder = array(), $arFilter = array(), $arGroupBy = false, $arNavStartParams = false, $arSelect = array(), $props = true)
+        public function GetElements($arOrder = [], $arFilter = [], $arGroupBy = false, $arNavStartParams = false, $arSelect = [], $props = true)
         {
             Loader::includeModule("iblock");
             if(empty($arOrder))
@@ -172,14 +195,16 @@ namespace A1expert
             return $returnResult;
         }
         
-        public function GetSections($arOrder = array(), $arFilter = array(), $bIncCnt = false, $arSelect = array(), $NavStartParams = false)
+        public function GetSections($arOrder = [], $arFilter = [], $bIncCnt = false, $arSelect = [], $NavStartParams = false)
         {
             Loader::includeModule("iblock");
             if(empty($arOrder))
                 $arOrder = array("SORT"=>"ASC");
             $rsSections = \CIBlockSection::GetList($arOrder, $arFilter, $bIncCnt, $arSelect, $NavStartParams);
+            $returnResult = [];
             while ($arSect = $rsSections->GetNext())
             {
+                $this->GetSectionPictures($arSect , $arSelect);
                 $returnResult[] = $arSect;
             }
             return $returnResult;
@@ -189,8 +214,8 @@ namespace A1expert
         {
             $arSelect = array("ID", "IBLOCK_ID", "DETAIL_PAGE_URL", "NAME");
             $arFilter = array("ACTIVE" => "Y", "IBLOCK_ID" => $iblockId);
-            $elements = $this->GetElements(array(), $arFilter, false, false, $arSelect);
-            $secs = $this->GetSections(array(), $arFilter, true, array("ID", "IBLOCK_ID", "SECTION_PAGE_URL", "NAME", "DEPTH_LEVEL"), false);
+            $elements = $this->GetElements([], $arFilter, false, false, $arSelect);
+            $secs = $this->GetSections([], $arFilter, true, array("ID", "IBLOCK_ID", "SECTION_PAGE_URL", "NAME", "DEPTH_LEVEL"), false);
 
             foreach ($secs as $sec)
             {
